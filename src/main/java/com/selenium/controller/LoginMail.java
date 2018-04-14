@@ -1,11 +1,12 @@
 package com.selenium.controller;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
@@ -17,6 +18,7 @@ public class LoginMail {
     //String passWord = "gyhcbnghrg";
     //String recoveryMail = "Hoangvantuong0864@gmail.com";
     static String pageSource;
+    static String readyStateComplete;
     public static Boolean TF = null;
     public static Boolean CheckAcc(String userName, String passWord, String recoveryMail, Integer i) throws InterruptedException {
 
@@ -29,11 +31,21 @@ public class LoginMail {
         options.addArguments(profileChrome);
 
         WebDriver driver = new ChromeDriver(options);
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.navigate().to("https://accounts.google.com/signin");
         //Thread.sleep(50000);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        pageSource = driver.getPageSource();
+        while (true)
+        {
+            JavascriptExecutor executor = (JavascriptExecutor) driver;
+            readyStateComplete = (String)executor.executeScript("return document.readyState");
+            System.out.println(readyStateComplete);
+            if (readyStateComplete.equals("complete")) {
+                pageSource = driver.getPageSource();
+                break;
+            }
+        }
         System.out.println("GetPageSource1");
         if (pageSource.contains("My Account gives you") || pageSource.contains("Tài khoản của tôi cho phép")) {
             driver.quit();
@@ -44,12 +56,21 @@ public class LoginMail {
             System.out.println("Enter the username");
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#identifierId"))).sendKeys(userName);
             // findElement(By.cssSelector("#identifierId")).sendKeys(userName);
-            Thread.sleep(1000);
+            Thread.sleep(300);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#identifierNext > content > span"))).click();
             //driver.findElement(By.cssSelector("#identifierNext > content > span")).click();
-            Thread.sleep(1000);
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-            pageSource = driver.getPageSource();
+            Thread.sleep(300);
+            while (true)
+            {
+                JavascriptExecutor executor = (JavascriptExecutor) driver;
+                readyStateComplete = (String)executor.executeScript("return document.readyState");
+                System.out.println(readyStateComplete);
+                if (readyStateComplete.equals("complete")) {
+                    pageSource = driver.getPageSource();
+                    break;
+                }
+            }
+
             System.out.println("GetPageSource2");
             if (pageSource.contains("Nhập mật khẩu của bạn") || pageSource.contains("Enter your password")) {
                 System.out.println("Enter the password");
@@ -57,12 +78,22 @@ public class LoginMail {
                         " div > div.Xb9hP > input"))).sendKeys(passWord);
                 //driver.findElement(By.cssSelector("#password > div.aCsJod.oJeWuf > div > div.Xb9hP > input"))
                 //.sendKeys(passWord);
-                Thread.sleep(1000);
+                Thread.sleep(300);
                 wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#passwordNext > content > span"))).click();
                 //driver.findElement(By.cssSelector("#passwordNext > content > span")).click();
-                Thread.sleep(1000);
-                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                pageSource = driver.getPageSource();
+                //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+                Thread.sleep(300);
+                while (true)
+                {
+                    JavascriptExecutor executor = (JavascriptExecutor) driver;
+                    readyStateComplete = (String)executor.executeScript("return document.readyState");
+                    System.out.println(readyStateComplete);
+                    if (readyStateComplete.equals("complete")) {
+                        pageSource = driver.getPageSource();
+                        break;
+                    }
+                }
+
                 System.out.println("GetPageSource3");
                 if (pageSource.contains("Confirm your recovery email") || pageSource.contains("Xác nhận email khôi phục của bạn")) {
                     System.out.println("Enter the recovery Mail");
@@ -70,57 +101,70 @@ public class LoginMail {
                             " div > div > ul > li:nth-child(1) > div > div.vdE7Oc"))).click();
                     //driver.findElement(By.cssSelector("#view_container > form > div.mbekbe.bxPAYd > div >" +
                     //        " div > div > ul > li:nth-child(1) > div > div.vdE7Oc")).click();
-                    Thread.sleep(1000);
+                    Thread.sleep(300);
+
                     wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#knowledge-preregis" +
                             "tered-email-response"))).sendKeys(recoveryMail);
                     //driver.findElement(By.cssSelector("#knowledge-preregis" +
                     //        "tered-email-response")).sendKeys(recoveryMail);
-                    Thread.sleep(1000);
+                    Thread.sleep(300);
+
                     wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#next > content > span"))).click();
                     //driver.findElement(By.cssSelector("#next > content > span")).click();
-                    Thread.sleep(1000);
-                    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                    pageSource = driver.getPageSource();
+
+                    Thread.sleep(300);
+                    while (true)
+                    {
+                        JavascriptExecutor executor = (JavascriptExecutor) driver;
+                        readyStateComplete = (String)executor.executeScript("return document.readyState");
+                        System.out.println(readyStateComplete);
+                        if (readyStateComplete.equals("complete")) {
+                            pageSource = driver.getPageSource();
+                            break;
+                        }
+                    }
+
                     System.out.println("Get PageSource4");
                     if (CheckActive(pageSource)) {
+                        //System.out.println("CheckActive page source");
                         driver.quit();
                     } else {
+                        //System.out.println("CheckActive page source");
                         driver.quit();
                     }
 
-                } else {
-                    if (CheckActive(pageSource)) {
-                        driver.quit();
-                        //
-                        //
-                    } else {
-                        driver.quit();
-                        //
-                        //
-                    }
+                } else if (CheckActive(pageSource)) {
+                    //System.out.println("CheckActive page source");
+                    driver.quit();
+                    //
+                    //
+                } else if (!CheckActive(pageSource)){
+                    //System.out.println("!CheckActive page source");
+                    driver.quit();
                 }
             } else if (pageSource.contains("Mật khẩu của bạn đã được thay đổi ") ||
                     pageSource.contains("Your password was changed")) {
                 System.out.println("Password was changed!");
                 driver.quit();
                 TF = false;
+            } else if (pageSource.contains("Couldn't find your Google Account")||
+                    pageSource.contains("Không thể tìm thấy Tài khoản Google của bạn")) {
+                System.out.println("Error username");
+                driver.quit();
+                TF = false;
             }
-        } else {
-            System.out.println("Error username");
-            driver.quit();
-            TF = false;
         }
         return TF;
     }
 
     public static Boolean CheckActive(String pageSource) {
-        if (pageSource.contains("Sai mật khẩu. Hãy thử lại hoặc nhấp") || pageSource.contains("Wrong password. Try ")) {
+        if (pageSource.contains("Sai mật khẩu. Hãy thử lại hoặc nhấp")||pageSource.contains("Wrong password. Try ")) {
             System.out.println("Error Password");
             TF = false;
-        } else if (pageSource.contains("Đã vô hiệu hóa tài khoản") || pageSource.contains("Account disabled")) {
+        } else if (pageSource.contains("Đã vô hiệu hóa tài khoản")||pageSource.contains("Account disabled")) {
             System.out.println("Account Disable!");
             TF = false;
-        } else if (pageSource.contains("Bảo vệ tài khoản của bạn") || pageSource.contains("Protect your account")) {
+        } else if (pageSource.contains("Bảo vệ tài khoản của bạn")||pageSource.contains("Protect your account")) {
             System.out.println("Actived!");
             TF = true;
         } else if (pageSource.contains("Verify your identity")||pageSource.contains("Xác minh danh tính của bạn")) {
@@ -129,11 +173,11 @@ public class LoginMail {
         } else if (pageSource.contains("2-Step Verification")||pageSource.contains("Xác minh 2 bước")) {
             System.out.println("2-Step Verification");
             TF = false;
-        } else if (pageSource.contains("Email bạn đã nhập không chính xác") || pageSource.contains("The email you entered is incorrect.")) {
+        } else if (pageSource.contains("Email bạn đã nhập không chính xác")||pageSource.contains("The email you entered is incorrect.")) {
             System.out.println("Error Recovery Mail");
             TF = false;
-        } else if (pageSource.contains("My Account gives you") || pageSource.contains("Tài khoản của tôi cho phép")) {
-            System.out.println("Actived!");
+        } else if (pageSource.contains("My Account gives you quick access")||pageSource.contains("Tài khoản của tôi cho phép")) {
+            System.out.println(pageSource);
             TF = true;
         }
         return TF;
