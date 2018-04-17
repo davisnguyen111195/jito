@@ -1,22 +1,46 @@
 package com.selenium.controller;
 
+
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.concurrent.TimeUnit;
 
-import static com.selenium.controller.LoginMail.CheckAcc;
+import java.io.*;
+
+
 
 
 public class Login {
+    static String line = null;
+    static Integer i = 1;
+
     public static void main(String[] args) throws InterruptedException {
         try {
-            Boolean check = CheckAcc("Hoangthihang93626", "gthihang93626pp", "Nguyenthithao9264@gmail.com", 1);
-            System.out.println(check.toString());
+
+            FileReader fileReader = new FileReader("/home/dat/Downloads/200mail.csv");
+            FileWriter fileWriter = new FileWriter("/home/dat/Downloads/success.txt");
+            BufferedReader br = new BufferedReader(fileReader);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            line = br.readLine();
+            while(line != null) {
+                String[] dataRow = line.split(",");
+                Boolean check = AutoG.AutoLogin(dataRow[0],dataRow[1],dataRow[2],i);
+                if(check) {
+                    bw.write(line);
+                    bw.write("\n");
+                    bw.flush();
+                }
+                i++;
+                line = br.readLine();
+                System.out.println(check.toString());
+                Thread.sleep(5000);
+            }
+            br.close();
+            bw.close();
+
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
+
         }
     }
 }
