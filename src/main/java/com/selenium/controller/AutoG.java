@@ -1,27 +1,26 @@
 package com.selenium.controller;
 
-import org.openqa.selenium.JavascriptExecutor;
+
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.util.concurrent.TimeUnit;
 
 import static com.selenium.controller.Controller.*;
 
 public class AutoG {
-    static String readyStateComplete = null;
     static WebDriver driver = null;
-    public static Boolean TF = null;
-    static String userPC = null;
+    static Boolean TF = null;
+    static String userPC = System.getProperty("user.name");
     static String pathChromeDriver = null;
     static String profileChrome = null;
     public static Boolean AutoLogin(String user, String pass, String recoveryMail, Integer i) throws InterruptedException {
         //Setup Chrome
-        userPC = System.getProperty("user.name");
+
         System.out.println(userPC);
         pathChromeDriver = "/home/" + userPC + "/Documents/GmailAutoSend/chromedriver";
         System.setProperty("webdriver.chrome.driver", pathChromeDriver);
@@ -30,6 +29,7 @@ public class AutoG {
         options.addArguments(profileChrome);
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+        driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
 
         driver.get("https://accounts.google.com/signin");
 

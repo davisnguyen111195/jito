@@ -81,7 +81,7 @@ public class Controller {
 
     static int waitForElement(WebElement obj) throws InterruptedException {
         int counter = 0;
-        while(counter!=15) {
+        while(counter!=5) {
             try {
                 if (obj.isDisplayed()&&obj.isEnabled()) {
                     System.out.println("Object is displayed");
@@ -91,7 +91,7 @@ public class Controller {
                 counter++;
                 try {
                     System.out.println("Object isn't display");
-                    Thread.sleep(100L);
+                    Thread.sleep(1000L);
                 } catch(InterruptedException e1) {
                     e1.printStackTrace();
                 }

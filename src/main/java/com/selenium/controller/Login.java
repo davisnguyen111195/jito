@@ -15,9 +15,8 @@ public class Login {
 
     public static void main(String[] args) throws InterruptedException {
         try {
-
-            FileReader fileReader = new FileReader("/home/dat/Downloads/200mail.csv");
-            FileWriter fileWriter = new FileWriter("/home/dat/Downloads/success.txt");
+            FileReader fileReader = new FileReader("/home/"+ AutoG.userPC +"/Documents/GmailAutoSend/200mail.csv");
+            FileWriter fileWriter = new FileWriter("/home/"+ AutoG.userPC +"/Documents/GmailAutoSend/success.txt");
             BufferedReader br = new BufferedReader(fileReader);
             BufferedWriter bw = new BufferedWriter(fileWriter);
             line = br.readLine();
@@ -36,11 +35,8 @@ public class Login {
             }
             br.close();
             bw.close();
-
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
-
         }
     }
 }
